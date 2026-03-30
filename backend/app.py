@@ -35,6 +35,7 @@ def create_app(test_config=None):
     app.config['JWT_TOKEN_LOCATION'] = ['headers']
     app.config['JWT_HEADER_NAME'] = os.environ.get('JWT_HEADER_NAME', 'Authorization')
     app.config['JWT_HEADER_TYPE'] = os.environ.get('JWT_HEADER_TYPE', 'Bearer')
+    
 
     # Override with test config if passed
     if test_config:
