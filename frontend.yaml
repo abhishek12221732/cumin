@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: cumin-frontend:latest
-          imagePullPolicy: Never
+          image: rusteecode97/cumin-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
 
@@ -31,4 +31,4 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-  type: NodePort
+  type: LoadBalancer

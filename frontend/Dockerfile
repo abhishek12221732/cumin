@@ -16,8 +16,9 @@ RUN npm install
 # Copy the rest of the frontend source code
 COPY . .
 
-# Force the variable inline with the build command
-RUN VITE_URL_BASE_URL="http://localhost:5000" npm run build
+ENV VITE_API_BASE_URL="http://aa57078a4f7d34f2882bd449cd8e00fb-484031258.us-east-1.elb.amazonaws.com:5000"
+
+
 
 # Build the Vite project for production
 # This generates the static HTML/CSS/JS files in the /dist folder
