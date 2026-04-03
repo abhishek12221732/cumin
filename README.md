@@ -9,8 +9,11 @@ Cumin Dashboard is a full-stack Jira-inspired project management tool built with
 
 
 cumin-dashboard/
+
 ├── backend/        # Flask API with PostgreSQL
+
 ├── frontend/       # React + Vite frontend
+
 ├── README.md
 
 
@@ -33,6 +36,9 @@ cumin-dashboard/
 - **Frontend**: React + Vite, Tailwind CSS
 - **Backend**: Flask (Python), Flask-JWT-Extended, SQLAlchemy
 - **Database**: PostgreSQL
+- **Containerization**: Docker
+- **Orchestration**: Kubernetes
+- **Monitoring**: Prometheus, Grafana (via Helm)
 - **Hosting**: Render (Free Tier for demo)
 
 ---
@@ -123,12 +129,96 @@ cumin-dashboard/
 ```
 ---
 
-## 🌐 Access
+## 🐳 Docker Setup
 
-* Frontend: [http://localhost:5173](http://localhost:5173)
-* Backend API: [http://localhost:5000/api](http://localhost:5000/api)
+The application components are containerized using Docker.
 
-Ensure PostgreSQL is running and that your `.env` files match your local configuration.
+### Building Docker Images
+
+1. **Backend**:
+```
+cd backend
+docker build -t cumin-backend:latest .
+```
+
+2. **Frontend**:
+```
+cd frontend
+docker build -t cumin-frontend:latest .
+```
+
+### Running Containers
+
+You can run the containers individually or use orchestration tools like Kubernetes (see below).
+
+---
+
+## ☸️ Orchestration with Kubernetes
+
+The project includes Kubernetes manifests for production deployment.
+
+### Prerequisites
+
+- Kubernetes cluster (e.g., Minikube, EKS, GKE)
+- kubectl
+
+### Deployment
+
+1. Apply the Kubernetes manifests from the root directory:
+
+```
+kubectl apply -f postgres.yaml
+kubectl apply -f backend.yaml
+kubectl apply -f frontend.yaml
+```
+
+2. This deploys:
+- PostgreSQL StatefulSet
+- Flask backend Deployment and Service
+- React frontend Deployment and Service
+- Ingress for external access
+
+3. Access via the configured Ingress URL.
+
+---
+
+## 📊 Monitoring with Prometheus and Grafana
+
+Monitoring is set up using Helm charts for Prometheus and Grafana.
+
+### Prerequisites
+
+- Helm
+- Kubernetes cluster
+
+### Installation
+
+1. Add Helm repositories:
+
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
+
+2. Install Prometheus:
+
+```
+helm install prometheus prometheus-community/prometheus
+```
+
+3. Install Grafana:
+
+```
+helm install grafana grafana/grafana
+```
+
+4. Access Grafana:
+- Get the admin password: `kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
+- Port forward: `kubectl port-forward svc/grafana 3000:80`
+- URL: [http://localhost:3000](http://localhost:3000)
+
+5. Configure Prometheus as a data source in Grafana and create dashboards for application metrics.
 
 ---
 
